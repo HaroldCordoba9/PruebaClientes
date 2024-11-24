@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="advanced-search-container" [formGroup]="newClientForm">
+    <h3 class="section-title">Create New Client</h3>
+    <hr class="section-divider">
+    <div class="search-row">
+      <label>Name</label>
+      <input type="text" formControlName="businessId">
+      <div *ngIf="newClientForm.get('businessId')?.touched && newClientForm.get('businessId')?.invalid" class="error-message">
+        <small *ngIf="newClientForm.get('businessId')?.hasError('required')">Name is required</small>
+        <small *ngIf="newClientForm.get('businessId')?.hasError('pattern')">Invalid name format</small>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <label>Phone</label>
+      <input type="number" min="0" formControlName="phone">
+      <div *ngIf="newClientForm.get('phone')?.touched && newClientForm.get('phone')?.invalid" class="error-message">
+        <small *ngIf="newClientForm.get('phone')?.hasError('required')">Phone is required</small>
+      </div>
+    </div>
+    <div class="search-row">
+      <label>E-mail</label>
+      <input type="email" formControlName="email">
+      <div *ngIf="newClientForm.get('email')?.touched && newClientForm.get('email')?.invalid" class="error-message">
+        <small *ngIf="newClientForm.get('email')?.hasError('required')">E-mail is required</small>
+        <small *ngIf="newClientForm.get('email')?.hasError('email')">Invalid email format</small>
+      </div>
+    </div>
+    <div class="search-row">
+      <label>Start date</label>
+      <input type="date" formControlName="startDate">
+      <div *ngIf="newClientForm.get('startDate')?.touched && newClientForm.get('startDate')?.invalid" class="error-message">
+        <small *ngIf="newClientForm.get('startDate')?.hasError('required')">StartDate is required</small>
+      </div>
+      <div *ngIf="newClientForm.hasError('invalidDateRange') && newClientForm.touched" class="error-message">
+        <small>Start date must be before end date</small>
+      </div>
+    </div>
+    <div class="search-row">
+      <label>End date</label>
+      <input type="date" formControlName="endDate">
+      <div *ngIf="newClientForm.get('endDate')?.touched && newClientForm.get('endDate')?.invalid" class="error-message">
+        <small *ngIf="newClientForm.get('endDate')?.hasError('required')">EndDate is required</small>
+      </div>
+      <div *ngIf="newClientForm.hasError('invalidDateRange') && newClientForm.touched" class="error-message">
+        <small>End date must be after start date</small>
+      </div>
+    </div>
+
+    <button class="submit-button" (click)="saveNewClient()">OK</button>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="main-container">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav class="sidenav" mode="side" opened>
+      <div class="sidebar-header-image">
+        <img src="../assets/img/Alianza.png" width="150">
+      </div>
+      <div class="sidebar-header">
+        <mat-icon>person</mat-icon>
+        Clients
+      </div>
+       <div class="submenu-item-container">
+        <div class="submenu-item">Clients</div>
+        <div class="submenu-item">Client look history</div>
+        <div class="submenu-item">Emergency PIN configuration</div>
+        <div class="submenu-item">Emergency PIN history</div>
+       </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <mat-toolbar class="mat-toolbar">
+        <div class="button-group">
+          <button mat-button class="new-button" (click)="openNewClientModal()">+ New</button>
+          <button mat-button class="export-button" (click)="exportToCSV()"><i class="fa fa-file-export"></i> Export</button>
+        </div>
+        <div class="search-row">
+          <input matInput class="search-input" placeholder="Enter shared key" [(ngModel)]="sharedKey">
+          <button mat-raised-button class="search-button" (click)="getClienteBySharedKey(sharedKey)">Search</button>
+          <button mat-raised-button class="advanced-search-button" (click)="toggleAdvancedSearch()" *ngIf="!advancedSearch">Advanced Search</button>
+        </div>
+      </mat-toolbar>
+
+      <div class="advanced-search-container" *ngIf="advancedSearch" [formGroup]="advancedClientSearchForm">
+          <div class="search-row">
+            <label >Name</label>
+            <input type="text" formControlName="businessId">
+            <div *ngIf="advancedClientSearchForm.get('businessId')?.touched && advancedClientSearchForm.get('businessId')?.invalid" class="error-message">
+              <small *ngIf="advancedClientSearchForm.get('businessId')?.hasError('pattern')">Invalid name format</small>
+            </div>
+          </div>
+          <div class="search-row">
+            <label >Phone</label>
+            <input type="number" min="0" formControlName="phone">
+          </div>
+          <div class="search-row">
+            <label >E-mail</label>
+            <input type="email" formControlName="email">
+            <div *ngIf="advancedClientSearchForm.get('email')?.touched && advancedClientSearchForm.get('email')?.invalid" class="error-message">
+              <small *ngIf="advancedClientSearchForm.get('email')?.hasError('email')">Invalid email format</small>
+            </div>
+          </div>
+          <div class="search-row">
+            <label >Start date</label>
+            <input type="date" formControlName="startDate">
+            <div *ngIf="advancedClientSearchForm.hasError('invalidDateRange') && advancedClientSearchForm.touched" class="error-message">
+              <small>Start date must be before end date</small>
+            </div>
+          </div>
+          <div class="search-row">
+            <label >End date</label>
+            <input type="date" formControlName="endDate">
+            <div *ngIf="advancedClientSearchForm.hasError('invalidDateRange') && advancedClientSearchForm.touched" class="error-message">
+              <small>End date must be after start date</small>
+            </div>
+          </div>
+          <button class="submit-button" (click)="advancedClientsSearch()">OK</button>
+      </div>
+
+      <div class="title">
+        Clients
+      </div>
+      <div class="table-container">
+        <table mat-table [dataSource]="listaClientes" class="mat-table">
+
+          <ng-container matColumnDef="sharedKey">
+            <th mat-header-cell *matHeaderCellDef>Shared Key</th>
+            <td mat-cell *matCellDef="let element">{{element.sharedKey}}</td>
+          </ng-container>
+          <ng-container matColumnDef="businessId">
+            <th mat-header-cell *matHeaderCellDef>Business Id</th>
+            <td mat-cell *matCellDef="let element">{{element.businessId}}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>E-mail</th>
+            <td mat-cell *matCellDef="let element">{{element.email}}</td>
+          </ng-container>
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let element">{{element.phone}}</td>
+          </ng-container>
+          <ng-container matColumnDef="dataAdded">
+            <th mat-header-cell *matHeaderCellDef>Data Added</th>
+            <td mat-cell *matCellDef="let element">{{element.dataAdded | date:'dd/MM/yyyy'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef><mat-icon>edit</mat-icon></th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon>edit</mat-icon>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
